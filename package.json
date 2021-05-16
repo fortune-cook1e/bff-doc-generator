@@ -1,0 +1,27 @@
+{
+  "name": "bff-doc-generator",
+  "version": "1.0.0",
+  "main": "lib/index",
+  "repository": "https://github.com/fortune-cook1e/bff-doc-generator.git",
+  "author": "fortune cookie <767077147@qq.com>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "tsc -w",
+    "compiler": "rimraf dist && tsc"
+  },
+  "dependencies": {
+    "@typescript-eslint/typescript-estree": "^4.23.0",
+    "fs-extra": "^10.0.0",
+    "ora": "^5.4.0",
+    "typescript": "^4.2.4"
+  },
+  "devDependencies": {
+    "@babel/eslint-parser": "^7.13.14",
+    "@types/fs-extra": "^9.0.11",
+    "@typescript-eslint/eslint-plugin": "^4.22.0",
+    "@typescript-eslint/parser": "^4.22.0",
+    "eslint": "^7.25.0",
+    "eslint-config-alloy": "^3.10.0",
+    "typescript": "^4.2.4"
+  }
+}

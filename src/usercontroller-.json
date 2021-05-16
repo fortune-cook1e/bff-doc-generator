@@ -1,0 +1,357 @@
+{
+ "methods": [
+  {
+   "type": "MethodDefinition",
+   "key": {
+    "type": "Identifier",
+    "name": "login"
+   },
+   "value": {
+    "type": "FunctionExpression",
+    "id": null,
+    "generator": false,
+    "expression": false,
+    "async": true,
+    "body": {
+     "type": "BlockStatement",
+     "body": [
+      {
+       "type": "ReturnStatement",
+       "argument": {
+        "type": "CallExpression",
+        "callee": {
+         "type": "MemberExpression",
+         "object": {
+          "type": "MemberExpression",
+          "object": {
+           "type": "ThisExpression"
+          },
+          "property": {
+           "type": "Identifier",
+           "name": "userService"
+          },
+          "computed": false,
+          "optional": false
+         },
+         "property": {
+          "type": "Identifier",
+          "name": "CodeToUserIdAndCorpid"
+         },
+         "computed": false,
+         "optional": false
+        },
+        "arguments": [
+         {
+          "type": "ObjectExpression",
+          "properties": [
+           {
+            "type": "Property",
+            "key": {
+             "type": "Identifier",
+             "name": "grantType"
+            },
+            "value": {
+             "type": "Identifier",
+             "name": "grantType"
+            },
+            "computed": false,
+            "method": false,
+            "shorthand": true,
+            "kind": "init"
+           },
+           {
+            "type": "Property",
+            "key": {
+             "type": "Identifier",
+             "name": "miniAppId"
+            },
+            "value": {
+             "type": "Identifier",
+             "name": "miniAppId"
+            },
+            "computed": false,
+            "method": false,
+            "shorthand": true,
+            "kind": "init"
+           },
+           {
+            "type": "Property",
+            "key": {
+             "type": "Identifier",
+             "name": "code"
+            },
+            "value": {
+             "type": "Identifier",
+             "name": "code"
+            },
+            "computed": false,
+            "method": false,
+            "shorthand": true,
+            "kind": "init"
+           },
+           {
+            "type": "Property",
+            "key": {
+             "type": "Identifier",
+             "name": "ctx"
+            },
+            "value": {
+             "type": "Identifier",
+             "name": "ctx"
+            },
+            "computed": false,
+            "method": false,
+            "shorthand": true,
+            "kind": "init"
+           }
+          ]
+         }
+        ],
+        "optional": false
+       }
+      }
+     ]
+    },
+    "params": [
+     {
+      "type": "Identifier",
+      "name": "metadata",
+      "typeAnnotation": {
+       "type": "TSTypeAnnotation",
+       "typeAnnotation": {
+        "type": "TSTypeReference",
+        "typeName": {
+         "type": "Identifier",
+         "name": "MetaData"
+        }
+       }
+      },
+      "decorators": [
+       {
+        "type": "Decorator",
+        "expression": {
+         "type": "CallExpression",
+         "callee": {
+          "type": "Identifier",
+          "name": "UseMetaData"
+         },
+         "arguments": [],
+         "optional": false
+        }
+       }
+      ]
+     },
+     {
+      "type": "Identifier",
+      "name": "miniAppId",
+      "typeAnnotation": {
+       "type": "TSTypeAnnotation",
+       "typeAnnotation": {
+        "type": "TSStringKeyword"
+       }
+      },
+      "decorators": [
+       {
+        "type": "Decorator",
+        "expression": {
+         "type": "CallExpression",
+         "callee": {
+          "type": "Identifier",
+          "name": "HeaderParam"
+         },
+         "arguments": [
+          {
+           "type": "Literal",
+           "value": "mini-app-id",
+           "raw": "\"mini-app-id\""
+          }
+         ],
+         "optional": false
+        }
+       }
+      ]
+     },
+     {
+      "type": "Identifier",
+      "name": "ctx",
+      "typeAnnotation": {
+       "type": "TSTypeAnnotation",
+       "typeAnnotation": {
+        "type": "TSTypeReference",
+        "typeName": {
+         "type": "Identifier",
+         "name": "Context"
+        }
+       }
+      },
+      "decorators": [
+       {
+        "type": "Decorator",
+        "expression": {
+         "type": "CallExpression",
+         "callee": {
+          "type": "Identifier",
+          "name": "Ctx"
+         },
+         "arguments": [],
+         "optional": false
+        }
+       }
+      ]
+     },
+     {
+      "type": "Identifier",
+      "name": "code",
+      "typeAnnotation": {
+       "type": "TSTypeAnnotation",
+       "typeAnnotation": {
+        "type": "TSStringKeyword"
+       }
+      },
+      "decorators": [
+       {
+        "type": "Decorator",
+        "expression": {
+         "type": "CallExpression",
+         "callee": {
+          "type": "Identifier",
+          "name": "BodyParam"
+         },
+         "arguments": [
+          {
+           "type": "Literal",
+           "value": "code",
+           "raw": "'code'"
+          },
+          {
+           "type": "ObjectExpression",
+           "properties": [
+            {
+             "type": "Property",
+             "key": {
+              "type": "Identifier",
+              "name": "required"
+             },
+             "value": {
+              "type": "Literal",
+              "value": true,
+              "raw": "true"
+             },
+             "computed": false,
+             "method": false,
+             "shorthand": false,
+             "kind": "init"
+            }
+           ]
+          }
+         ],
+         "optional": false
+        }
+       }
+      ]
+     },
+     {
+      "type": "Identifier",
+      "name": "grantType",
+      "typeAnnotation": {
+       "type": "TSTypeAnnotation",
+       "typeAnnotation": {
+        "type": "TSStringKeyword"
+       }
+      },
+      "decorators": [
+       {
+        "type": "Decorator",
+        "expression": {
+         "type": "CallExpression",
+         "callee": {
+          "type": "Identifier",
+          "name": "BodyParam"
+         },
+         "arguments": [
+          {
+           "type": "Literal",
+           "value": "grant_type",
+           "raw": "'grant_type'"
+          },
+          {
+           "type": "ObjectExpression",
+           "properties": [
+            {
+             "type": "Property",
+             "key": {
+              "type": "Identifier",
+              "name": "required"
+             },
+             "value": {
+              "type": "Literal",
+              "value": true,
+              "raw": "true"
+             },
+             "computed": false,
+             "method": false,
+             "shorthand": false,
+             "kind": "init"
+            }
+           ]
+          }
+         ],
+         "optional": false
+        }
+       }
+      ]
+     }
+    ],
+    "returnType": {
+     "type": "TSTypeAnnotation",
+     "typeAnnotation": {
+      "type": "TSTypeReference",
+      "typeName": {
+       "type": "Identifier",
+       "name": "Promise"
+      },
+      "typeParameters": {
+       "type": "TSTypeParameterInstantiation",
+       "params": [
+        {
+         "type": "TSTypeReference",
+         "typeName": {
+          "type": "Identifier",
+          "name": "AnyResponse"
+         }
+        }
+       ]
+      }
+     }
+    }
+   },
+   "computed": false,
+   "static": false,
+   "kind": "method",
+   "decorators": [
+    {
+     "type": "Decorator",
+     "expression": {
+      "type": "CallExpression",
+      "callee": {
+       "type": "Identifier",
+       "name": "Post"
+      },
+      "arguments": [
+       {
+        "type": "Literal",
+        "value": "/login",
+        "raw": "'/login'"
+       }
+      ],
+      "optional": false
+     }
+    }
+   ]
+  }
+ ],
+ "comments": [
+  " 登录获取userid corpid",
+  " wocao"
+ ]
+}
