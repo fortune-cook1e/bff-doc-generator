@@ -1,0 +1,705 @@
+{
+ "type": "Program",
+ "body": [
+  {
+   "type": "ImportDeclaration",
+   "source": {
+    "type": "Literal",
+    "value": "routing-controllers",
+    "raw": "\"routing-controllers\""
+   },
+   "specifiers": [
+    {
+     "type": "ImportSpecifier",
+     "local": {
+      "type": "Identifier",
+      "name": "Post"
+     },
+     "imported": {
+      "type": "Identifier",
+      "name": "Post"
+     }
+    },
+    {
+     "type": "ImportSpecifier",
+     "local": {
+      "type": "Identifier",
+      "name": "JsonController"
+     },
+     "imported": {
+      "type": "Identifier",
+      "name": "JsonController"
+     }
+    },
+    {
+     "type": "ImportSpecifier",
+     "local": {
+      "type": "Identifier",
+      "name": "UseBefore"
+     },
+     "imported": {
+      "type": "Identifier",
+      "name": "UseBefore"
+     }
+    },
+    {
+     "type": "ImportSpecifier",
+     "local": {
+      "type": "Identifier",
+      "name": "Ctx"
+     },
+     "imported": {
+      "type": "Identifier",
+      "name": "Ctx"
+     }
+    },
+    {
+     "type": "ImportSpecifier",
+     "local": {
+      "type": "Identifier",
+      "name": "BodyParam"
+     },
+     "imported": {
+      "type": "Identifier",
+      "name": "BodyParam"
+     }
+    },
+    {
+     "type": "ImportSpecifier",
+     "local": {
+      "type": "Identifier",
+      "name": "HeaderParam"
+     },
+     "imported": {
+      "type": "Identifier",
+      "name": "HeaderParam"
+     }
+    }
+   ],
+   "importKind": "value"
+  },
+  {
+   "type": "ImportDeclaration",
+   "source": {
+    "type": "Literal",
+    "value": "../utils/types",
+    "raw": "\"../utils/types\""
+   },
+   "specifiers": [
+    {
+     "type": "ImportSpecifier",
+     "local": {
+      "type": "Identifier",
+      "name": "MetaData"
+     },
+     "imported": {
+      "type": "Identifier",
+      "name": "MetaData"
+     }
+    },
+    {
+     "type": "ImportSpecifier",
+     "local": {
+      "type": "Identifier",
+      "name": "AnyResponse"
+     },
+     "imported": {
+      "type": "Identifier",
+      "name": "AnyResponse"
+     }
+    }
+   ],
+   "importKind": "value"
+  },
+  {
+   "type": "ImportDeclaration",
+   "source": {
+    "type": "Literal",
+    "value": "../middleware/decorators/params/UseMetaData",
+    "raw": "\"../middleware/decorators/params/UseMetaData\""
+   },
+   "specifiers": [
+    {
+     "type": "ImportDefaultSpecifier",
+     "local": {
+      "type": "Identifier",
+      "name": "UseMetaData"
+     }
+    }
+   ],
+   "importKind": "value"
+  },
+  {
+   "type": "ImportDeclaration",
+   "source": {
+    "type": "Literal",
+    "value": "@yunke/aicst-service-check",
+    "raw": "\"@yunke/aicst-service-check\""
+   },
+   "specifiers": [
+    {
+     "type": "ImportDefaultSpecifier",
+     "local": {
+      "type": "Identifier",
+      "name": "AuthoMiddleware"
+     }
+    }
+   ],
+   "importKind": "value"
+  },
+  {
+   "type": "ImportDeclaration",
+   "source": {
+    "type": "Literal",
+    "value": "../utils/common",
+    "raw": "\"../utils/common\""
+   },
+   "specifiers": [
+    {
+     "type": "ImportSpecifier",
+     "local": {
+      "type": "Identifier",
+      "name": "authoMiddlewareConfigs"
+     },
+     "imported": {
+      "type": "Identifier",
+      "name": "authoMiddlewareConfigs"
+     }
+    }
+   ],
+   "importKind": "value"
+  },
+  {
+   "type": "ImportDeclaration",
+   "source": {
+    "type": "Literal",
+    "value": "koa",
+    "raw": "\"koa\""
+   },
+   "specifiers": [
+    {
+     "type": "ImportSpecifier",
+     "local": {
+      "type": "Identifier",
+      "name": "Context"
+     },
+     "imported": {
+      "type": "Identifier",
+      "name": "Context"
+     }
+    }
+   ],
+   "importKind": "value"
+  },
+  {
+   "type": "ImportDeclaration",
+   "source": {
+    "type": "Literal",
+    "value": "typedi",
+    "raw": "\"typedi\""
+   },
+   "specifiers": [
+    {
+     "type": "ImportSpecifier",
+     "local": {
+      "type": "Identifier",
+      "name": "Inject"
+     },
+     "imported": {
+      "type": "Identifier",
+      "name": "Inject"
+     }
+    }
+   ],
+   "importKind": "value"
+  },
+  {
+   "type": "ImportDeclaration",
+   "source": {
+    "type": "Literal",
+    "value": "../service/UserService",
+    "raw": "'../service/UserService'"
+   },
+   "specifiers": [
+    {
+     "type": "ImportDefaultSpecifier",
+     "local": {
+      "type": "Identifier",
+      "name": "userService"
+     }
+    }
+   ],
+   "importKind": "value"
+  },
+  {
+   "type": "ExportDefaultDeclaration",
+   "declaration": {
+    "type": "ClassDeclaration",
+    "id": {
+     "type": "Identifier",
+     "name": "UserController"
+    },
+    "body": {
+     "type": "ClassBody",
+     "body": [
+      {
+       "type": "ClassProperty",
+       "key": {
+        "type": "Identifier",
+        "name": "userService"
+       },
+       "value": null,
+       "computed": false,
+       "static": false,
+       "declare": false,
+       "typeAnnotation": {
+        "type": "TSTypeAnnotation",
+        "typeAnnotation": {
+         "type": "TSTypeReference",
+         "typeName": {
+          "type": "Identifier",
+          "name": "userService"
+         }
+        }
+       },
+       "decorators": [
+        {
+         "type": "Decorator",
+         "expression": {
+          "type": "CallExpression",
+          "callee": {
+           "type": "Identifier",
+           "name": "Inject"
+          },
+          "arguments": [],
+          "optional": false
+         }
+        }
+       ],
+       "accessibility": "private"
+      },
+      {
+       "type": "MethodDefinition",
+       "key": {
+        "type": "Identifier",
+        "name": "login"
+       },
+       "value": {
+        "type": "FunctionExpression",
+        "id": null,
+        "generator": false,
+        "expression": false,
+        "async": true,
+        "body": {
+         "type": "BlockStatement",
+         "body": [
+          {
+           "type": "ReturnStatement",
+           "argument": {
+            "type": "CallExpression",
+            "callee": {
+             "type": "MemberExpression",
+             "object": {
+              "type": "MemberExpression",
+              "object": {
+               "type": "ThisExpression"
+              },
+              "property": {
+               "type": "Identifier",
+               "name": "userService"
+              },
+              "computed": false,
+              "optional": false
+             },
+             "property": {
+              "type": "Identifier",
+              "name": "CodeToUserIdAndCorpid"
+             },
+             "computed": false,
+             "optional": false
+            },
+            "arguments": [
+             {
+              "type": "ObjectExpression",
+              "properties": [
+               {
+                "type": "Property",
+                "key": {
+                 "type": "Identifier",
+                 "name": "grantType"
+                },
+                "value": {
+                 "type": "Identifier",
+                 "name": "grantType"
+                },
+                "computed": false,
+                "method": false,
+                "shorthand": true,
+                "kind": "init"
+               },
+               {
+                "type": "Property",
+                "key": {
+                 "type": "Identifier",
+                 "name": "miniAppId"
+                },
+                "value": {
+                 "type": "Identifier",
+                 "name": "miniAppId"
+                },
+                "computed": false,
+                "method": false,
+                "shorthand": true,
+                "kind": "init"
+               },
+               {
+                "type": "Property",
+                "key": {
+                 "type": "Identifier",
+                 "name": "code"
+                },
+                "value": {
+                 "type": "Identifier",
+                 "name": "code"
+                },
+                "computed": false,
+                "method": false,
+                "shorthand": true,
+                "kind": "init"
+               },
+               {
+                "type": "Property",
+                "key": {
+                 "type": "Identifier",
+                 "name": "ctx"
+                },
+                "value": {
+                 "type": "Identifier",
+                 "name": "ctx"
+                },
+                "computed": false,
+                "method": false,
+                "shorthand": true,
+                "kind": "init"
+               }
+              ]
+             }
+            ],
+            "optional": false
+           }
+          }
+         ]
+        },
+        "params": [
+         {
+          "type": "Identifier",
+          "name": "metadata",
+          "typeAnnotation": {
+           "type": "TSTypeAnnotation",
+           "typeAnnotation": {
+            "type": "TSTypeReference",
+            "typeName": {
+             "type": "Identifier",
+             "name": "MetaData"
+            }
+           }
+          },
+          "decorators": [
+           {
+            "type": "Decorator",
+            "expression": {
+             "type": "CallExpression",
+             "callee": {
+              "type": "Identifier",
+              "name": "UseMetaData"
+             },
+             "arguments": [],
+             "optional": false
+            }
+           }
+          ]
+         },
+         {
+          "type": "Identifier",
+          "name": "miniAppId",
+          "typeAnnotation": {
+           "type": "TSTypeAnnotation",
+           "typeAnnotation": {
+            "type": "TSStringKeyword"
+           }
+          },
+          "decorators": [
+           {
+            "type": "Decorator",
+            "expression": {
+             "type": "CallExpression",
+             "callee": {
+              "type": "Identifier",
+              "name": "HeaderParam"
+             },
+             "arguments": [
+              {
+               "type": "Literal",
+               "value": "mini-app-id",
+               "raw": "\"mini-app-id\""
+              }
+             ],
+             "optional": false
+            }
+           }
+          ]
+         },
+         {
+          "type": "Identifier",
+          "name": "ctx",
+          "typeAnnotation": {
+           "type": "TSTypeAnnotation",
+           "typeAnnotation": {
+            "type": "TSTypeReference",
+            "typeName": {
+             "type": "Identifier",
+             "name": "Context"
+            }
+           }
+          },
+          "decorators": [
+           {
+            "type": "Decorator",
+            "expression": {
+             "type": "CallExpression",
+             "callee": {
+              "type": "Identifier",
+              "name": "Ctx"
+             },
+             "arguments": [],
+             "optional": false
+            }
+           }
+          ]
+         },
+         {
+          "type": "Identifier",
+          "name": "code",
+          "typeAnnotation": {
+           "type": "TSTypeAnnotation",
+           "typeAnnotation": {
+            "type": "TSStringKeyword"
+           }
+          },
+          "decorators": [
+           {
+            "type": "Decorator",
+            "expression": {
+             "type": "CallExpression",
+             "callee": {
+              "type": "Identifier",
+              "name": "BodyParam"
+             },
+             "arguments": [
+              {
+               "type": "Literal",
+               "value": "code",
+               "raw": "'code'"
+              },
+              {
+               "type": "ObjectExpression",
+               "properties": [
+                {
+                 "type": "Property",
+                 "key": {
+                  "type": "Identifier",
+                  "name": "required"
+                 },
+                 "value": {
+                  "type": "Literal",
+                  "value": true,
+                  "raw": "true"
+                 },
+                 "computed": false,
+                 "method": false,
+                 "shorthand": false,
+                 "kind": "init"
+                }
+               ]
+              }
+             ],
+             "optional": false
+            }
+           }
+          ]
+         },
+         {
+          "type": "Identifier",
+          "name": "grantType",
+          "typeAnnotation": {
+           "type": "TSTypeAnnotation",
+           "typeAnnotation": {
+            "type": "TSStringKeyword"
+           }
+          },
+          "decorators": [
+           {
+            "type": "Decorator",
+            "expression": {
+             "type": "CallExpression",
+             "callee": {
+              "type": "Identifier",
+              "name": "BodyParam"
+             },
+             "arguments": [
+              {
+               "type": "Literal",
+               "value": "grant_type",
+               "raw": "'grant_type'"
+              },
+              {
+               "type": "ObjectExpression",
+               "properties": [
+                {
+                 "type": "Property",
+                 "key": {
+                  "type": "Identifier",
+                  "name": "required"
+                 },
+                 "value": {
+                  "type": "Literal",
+                  "value": true,
+                  "raw": "true"
+                 },
+                 "computed": false,
+                 "method": false,
+                 "shorthand": false,
+                 "kind": "init"
+                }
+               ]
+              }
+             ],
+             "optional": false
+            }
+           }
+          ]
+         }
+        ],
+        "returnType": {
+         "type": "TSTypeAnnotation",
+         "typeAnnotation": {
+          "type": "TSTypeReference",
+          "typeName": {
+           "type": "Identifier",
+           "name": "Promise"
+          },
+          "typeParameters": {
+           "type": "TSTypeParameterInstantiation",
+           "params": [
+            {
+             "type": "TSTypeReference",
+             "typeName": {
+              "type": "Identifier",
+              "name": "AnyResponse"
+             }
+            }
+           ]
+          }
+         }
+        }
+       },
+       "computed": false,
+       "static": false,
+       "kind": "method",
+       "decorators": [
+        {
+         "type": "Decorator",
+         "expression": {
+          "type": "CallExpression",
+          "callee": {
+           "type": "Identifier",
+           "name": "Post"
+          },
+          "arguments": [
+           {
+            "type": "Literal",
+            "value": "/login",
+            "raw": "'/login'"
+           }
+          ],
+          "optional": false
+         }
+        }
+       ]
+      }
+     ]
+    },
+    "superClass": null,
+    "decorators": [
+     {
+      "type": "Decorator",
+      "expression": {
+       "type": "CallExpression",
+       "callee": {
+        "type": "Identifier",
+        "name": "JsonController"
+       },
+       "arguments": [
+        {
+         "type": "Literal",
+         "value": "/v1/user",
+         "raw": "'/v1/user'"
+        }
+       ],
+       "optional": false
+      }
+     },
+     {
+      "type": "Decorator",
+      "expression": {
+       "type": "CallExpression",
+       "callee": {
+        "type": "Identifier",
+        "name": "UseBefore"
+       },
+       "arguments": [
+        {
+         "type": "CallExpression",
+         "callee": {
+          "type": "Identifier",
+          "name": "AuthoMiddleware"
+         },
+         "arguments": [
+          {
+           "type": "Identifier",
+           "name": "authoMiddlewareConfigs"
+          }
+         ],
+         "optional": false
+        }
+       ],
+       "optional": false
+      }
+     }
+    ]
+   },
+   "exportKind": "value"
+  }
+ ],
+ "sourceType": "module",
+ "comments": [
+  {
+   "type": "Block",
+   "value": "*\n   * @description 登录获取userid corpid\n   * @name login\n   * @param metadata metadat awowo dsads\n   * @param code hahad ss\n   ",
+   "range": [
+    625,
+    754
+   ],
+   "loc": {
+    "start": {
+     "line": 18,
+     "column": 2
+    },
+    "end": {
+     "line": 23,
+     "column": 5
+    }
+   }
+  }
+ ]
+}
