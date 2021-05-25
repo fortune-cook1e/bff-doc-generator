@@ -21,18 +21,29 @@ export interface GetAstMethodParamsResponse {
 }
 
 export interface MethodParamItem {
-  name:string;
-  type:string;
-  description:string;
-  isRequired:boolean;
+  name:string;         // 参数名称
+  type:string;         // 参数类型
+  description:string;  // 参数描述
+  isRequired:boolean;  // 是否必须
 }
 
 export interface TransformAstMethodItemResponse {
-  name:string;
-  route:string;
+  name:string;                // api名称
+  route:string;               // api路由
+  description:string;         // api注释
+  ajaxMethod:string;          // api方法
+  params:MethodParamItem[];   // api参数
+}
+
+export interface CommentItem {
+  description:string;         // 当前函数描述
+  name:string;                // 注释对应api名称
+  params:CommentParamItem[];  // 函数每个参数注释
+}
+
+export interface CommentParamItem {
+  key:string;
   description:string;
-  ajaxMethod:string;
-  params:MethodParamItem[];
 }
 
 const STRING_TYPE = 'TSStringKeyword' // string类型节点

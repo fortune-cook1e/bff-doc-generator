@@ -7,7 +7,10 @@ import {
   GetControllerInfoResponse,
   GetApiInfoResponse,
   GetAstMethodParamsResponse,
-  TransformAstMethodItemResponse
+  TransformAstMethodItemResponse,
+  CommentItem,
+  CommentParamItem,
+  MethodParamItem
 } from './types'
 
 type AnyOptions = {
@@ -15,12 +18,6 @@ type AnyOptions = {
 }
 
 const AJAX_METHODS = ['Get', 'GET', 'Post', 'POST']
-
-const str = '*\n   * @description 登录获取userid corpid\n   * @param metadata metadat awowo dsads\n   * @param code hahad ss\n   '
-
-const newStr = str.replace(/\n/g, '').replace(/\*/g, '').trim()
-
-console.log({ newStr })
 
 export async function runString(code:string, controllerFilePath:string):Promise<void> {
   try {
@@ -46,26 +43,12 @@ export async function runString(code:string, controllerFilePath:string):Promise<
 
     const { controllerName = '', apiPrefix = '' } = controllerInfo
 
-    // const [methods] = await Promise.all([getAstMethods(ast)])
-
-    // const astMethods = methods.map((method:AnyOptions) => {
-    //   const routeInfo = getMethodRouteInformation(method)
-    //   const params = getAstMethodParams(method)
-    //   return {
-    //     ...routeInfo,
-    //     params
-    //   }
-    // })
-
-    // const data = {
-    //   methods: astMethods,
-    //   comments: ast.comments
-    // }
+    const combinedApis = combineCommentsAndApis(apis, comments)
 
     const data = {
       controllerName,
       apiPrefix,
-      apis
+      apis: combinedApis
     }
 
     const dir = process.cwd() + '/src/doc'
@@ -188,7 +171,7 @@ export function getAstMethodParams(methodParams:any[] = []):GetAstMethodParamsRe
       params.push({
         name,
         type: paramTsType,
-        description: '',
+        description: '',  // 这里的description只能从注释中拿
         isRequired: false
       })
     }
@@ -202,25 +185,158 @@ export function getAstMethodParams(methodParams:any[] = []):GetAstMethodParamsRe
  * @date 2021-05-15 19:23:12
  * @return {string[]}
  */
+// 获取的数据格式为
+// const comment = {
+// 	description:'',   // 当前函数描述
+// 	name:'',          // 当前函数名称
+// 	params:[          // 函数参数
+// 		{
+// 			key:'',       // 参数名称
+// 			description:''      // 参数对应注释
+// 		}
+// 	]
+// }
 export function getAstComments(ast:AnyOptions):Promise<string[]> {
   let comments:string[] = []
 
   return new Promise((resolve, reject) => {
     try {
-      // TODO: 功能待完善
-      comments = ast.comments.reduce((array:string[], comment:any) => {
-      // 这里主要是截取 @description 后面的描述 作为函数的解释
-      // 目前只取 @description 块型注释
-      if (comment.type === 'Block') {
-        const description = comment.value.split('\n').map((item:string) => item.trim())[1].split('@description')[1]
-        array.push(description)
-      }
-      return array
+      comments = ast.comments.reduce((array:CommentItem[], comment:AnyOptions) => {
+        const commentItem:CommentItem = {
+          description: '',
+          name: '',
+          params: []
+        }
+
+        if (comment.type === 'Block') {
+          const transFormedValue = getTransformedComment(comment.value)
+          commentItem.description = getCommentDescription(transFormedValue)
+          commentItem.name = getCommentName(transFormedValue)
+          commentItem.params = getCommentParams(transFormedValue)
+        }
+
+        array.push(commentItem)
+        return array
       }, [])
+
       resolve(comments)
     } catch (e) {
       console.log(e)
       reject(comments)
     }
   })
+}
+
+/**
+ * @description 将单个comment 转换为每项为`@`开头的数组。例如 '@description' xxx
+ * @param {AnyOptions} comment
+ * @date 2021-05-24 21:08:58
+ * @return {AnyOptions[]}
+ */
+function getTransformedComment(comment:AnyOptions):string {
+  return comment.replace(/\n/g, '').split('*').filter((item:string) => item.includes('@')).map((item:AnyOptions) => item.trim())
+}
+
+/**
+ * @description 获取单个comment的description
+ * @param {*} commentArray
+ * @date 2021-05-24 21:10:24
+ * @return {string}
+ */
+function getCommentDescription(commentItem):string {
+  const descriptionSymbol = '@description'
+  const descriptionItem = commentItem.find((item:AnyOptions) => item.includes(descriptionSymbol))
+  if (!descriptionItem) return ''
+  return descriptionItem.slice(descriptionSymbol.length) || ''
+}
+
+/**
+ * @description 获取单个comment的name字段
+ * @param {*} commentArray
+ * @date 2021-05-24 21:14:54
+ * @return {string}
+ */
+function getCommentName(commentItem):string {
+  const nameSymbol = '@name'
+  const nameItem = commentItem.find((item:AnyOptions) => item.includes(nameSymbol))
+  if (!nameItem) return ''
+  return nameItem.slice(nameSymbol.length).trim() || ''
+}
+
+/**
+ * @description 获取函数每个参数以及参数注释
+ * @param {*} commentItem
+ * @date 2021-05-25 21:12:29
+ */
+function getCommentParams(commentItem):CommentParamItem[] {
+  const paramSymbol = '@param'
+  const paramList = commentItem.filter((item:AnyOptions) => item.includes(paramSymbol))
+  if (!paramList.length) return []
+  const params = paramList.reduce((list, item) => {
+    const paramItem:CommentParamItem = {
+      key: '',
+      description: ''
+    }
+    // 每个item形式为 @param metadata metadat awowo dsads
+    const firstSpaceIndex = item.indexOf(' ')
+    const inexistence = -1
+    // 先拿到第一个空格值,再拿第二个空格
+    // 第一个空格与第二个空格之间为 参数值
+    // 第二个空格之后为参数的注释
+    if (firstSpaceIndex !== inexistence) {
+      const secondSpaceIndex = item.indexOf(' ', firstSpaceIndex + 1)
+      if (secondSpaceIndex !== inexistence) {
+        paramItem.key = item.slice(firstSpaceIndex, secondSpaceIndex).trim()
+        paramItem.description = item.slice(secondSpaceIndex).trim()
+      }
+    }
+    list.push(paramItem)
+    return list
+  }, [])
+  return params
+}
+
+/**
+ * @description 合并转换后的apis和comments字段
+ * @param {*} apis
+ * @param {*} comments
+ * @date 2021-05-25 21:38:52
+ */
+function combineCommentsAndApis(apis, comments) {
+  if (!apis.length) return []
+  if (!comments.length) return apis
+
+  return apis.reduce((apiList, apiItem:TransformAstMethodItemResponse) => {
+    const { name: apiName = '' } = apiItem
+    const item:TransformAstMethodItemResponse = {
+      name: apiName,
+      ...apiItem
+    }
+
+    // 单个api根据注释的name字段来匹配
+    const sameNameComment = comments.find((comment:CommentItem) => comment.name === apiName)
+    // console.log(apiItem.params[0],  comments[0].params[0])
+    if (sameNameComment) {
+      item.description = sameNameComment.description
+      item.params = item.params.reduce((params, apiParamItem:MethodParamItem) => {
+        const item:MethodParamItem = {
+          ...apiParamItem
+        }
+        // 先匹配单个api的name 与 单个comment 单个param 的 key 字段
+        // 然后再匹配 单个api 与 单个comment 单个param的description 字段
+        const sameKeyComment = sameNameComment.params.find((commentParamItem:CommentParamItem) => commentParamItem.key === apiParamItem.name)
+        if (sameKeyComment) {
+          if (sameKeyComment.key === item.name) {
+            item.description = sameKeyComment.description
+          }
+        }
+        params.push(item)
+        return params
+      }, [])
+    }
+
+    apiList.push(item)
+
+    return apiList
+  }, [])
 }
