@@ -1,6 +1,6 @@
 import * as fs from 'fs-extra'
 import * as ora from 'ora'
-import { runString  } from './ast'
+import { runString, AnyOptions  } from './ast'
 
 export interface Config {
   controllerPath:string;
@@ -21,8 +21,15 @@ export default class Doc {
       this.getControllerPath()
       .then((filePaths:string[]) => {
         const runPromises = filePaths.map((controllerFilePath:string) => this.runFile(controllerFilePath))
+        // 将所有的controller数据合并在一起
         Promise.all([...runPromises])
-        .then(() => {
+        .then((controllerData) => {
+          const dir = process.cwd() + '/src/doc'
+          fs.writeFileSync(`${dir}/doc.js`, 'module.exports = ' + JSON.stringify(controllerData, null, 2), 'utf-8')
+          fs.writeJSONSync(`${dir}/doc.json`, controllerData, {
+            encoding: 'utf-8',
+            spaces: 1
+          })
           spinner.succeed('document created successfully!')
         })
       })
@@ -42,11 +49,13 @@ export default class Doc {
     })
   }
 
-  runFile(runFilePath:string):Promise<void> {
+  runFile(runFilePath:string):Promise<AnyOptions> {
     return new Promise((resolve) => {
       const data = fs.readFileSync(runFilePath, 'utf-8')
       runString(data, runFilePath)
-      resolve()
+        .then(controllerData => {
+          resolve(controllerData)
+        })
     })
   }
 }

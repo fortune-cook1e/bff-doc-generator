@@ -13,13 +13,13 @@ import {
   MethodParamItem
 } from './types'
 
-type AnyOptions = {
+export type AnyOptions = {
   [propname:string]:any;
 }
 
 const AJAX_METHODS = ['Get', 'GET', 'Post', 'POST']
 
-export async function runString(code:string, controllerFilePath:string):Promise<void> {
+export async function runString(code:string, controllerFilePath:string):Promise<AnyOptions> {
   try {
     const filename = path.basename(controllerFilePath, '.ts').toLowerCase()
     const astOptions = {
@@ -52,15 +52,14 @@ export async function runString(code:string, controllerFilePath:string):Promise<
     }
 
     const dir = process.cwd() + '/src/doc'
-
     fs.writeJSONSync(`${dir}/${filename}-.json`, data, {
       encoding: 'utf-8',
       spaces: 1
     })
-    fs.writeJSONSync(`${dir}/${filename}-ast.json`, ast, {
-      encoding: 'utf-8',
-      spaces: 1
-    })
+    // fs.writeJSONSync(`${dir}/${filename}-ast.json`, ast, {
+    //   encoding: 'utf-8',
+    //   spaces: 1
+    // })
   } catch (e) {
     console.log(e)
   }
