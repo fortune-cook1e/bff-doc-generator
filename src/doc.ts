@@ -44,8 +44,8 @@ export default class Doc {
       const { controllerPath = '' } = this.config
       const files = fs.readdirSync(controllerPath)
       const paths = files.map((file:string) => controllerPath + file)
-      // const filterPaths = paths.filter((item:string) => item.includes('UserController'))
-      resolve(paths)
+      const filterPaths = paths.filter((item:string) => item.includes('UserController'))
+      resolve(filterPaths)
     })
   }
 

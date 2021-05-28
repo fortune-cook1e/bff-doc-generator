@@ -14,6 +14,14 @@ type ParamTsAnnotation = {
   typeAnnotation:TsAnnotation
 }
 
+const TypescriptTypeMap = {
+  'TSAnyKeyword': 'any',
+  'TSStringKeyword': 'string',
+  'TSArrayType': 'array',
+  'TSBooleanKeyword': 'boolean',
+  'TSNumberKeyword': 'number',
+}
+
 /**
  * @description 判断当前参数类型
  * @param {ParamTsAnnotation} typeAnnotation
@@ -28,5 +36,6 @@ export function decideTsType(typeAnnotation:ParamTsAnnotation):string {
     const  { type = '', name = '' } = typeAnnotation.typeAnnotation.typeName
     return type === 'Identifier' ? name : ''
   }
-  return innerType
+  return TypescriptTypeMap[innerType]
 }
+

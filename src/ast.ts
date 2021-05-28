@@ -56,10 +56,11 @@ export async function runString(code:string, controllerFilePath:string):Promise<
       encoding: 'utf-8',
       spaces: 1
     })
-    // fs.writeJSONSync(`${dir}/${filename}-ast.json`, ast, {
-    //   encoding: 'utf-8',
-    //   spaces: 1
-    // })
+    fs.writeJSONSync(`${dir}/${filename}-ast.json`, ast, {
+      encoding: 'utf-8',
+      spaces: 1
+    })
+    return data
   } catch (e) {
     console.log(e)
   }
@@ -167,11 +168,15 @@ export function getAstMethodParams(methodParams:any[] = []):GetAstMethodParamsRe
     if (paramItem.type === 'Identifier') {
       const { name = '', typeAnnotation } = paramItem
       const paramTsType = decideTsType(typeAnnotation)
+
+      // optional 为true 那么参数为非必填
+      const isRequired = !paramItem?.optional
+
       params.push({
         name,
         type: paramTsType,
         description: '',  // 这里的description只能从注释中拿
-        isRequired: false
+        isRequired: isRequired
       })
     }
     return params
