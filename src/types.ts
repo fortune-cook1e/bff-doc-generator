@@ -33,6 +33,7 @@ export interface TransformAstMethodItemResponse {
   description:string;         // api注释
   ajaxMethod:string;          // api方法
   params:MethodParamItem[];   // api参数
+  snippets:string;            // 代码片
 }
 
 export interface CommentItem {

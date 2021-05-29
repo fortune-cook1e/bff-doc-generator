@@ -1,38 +1,38 @@
 import * as fs from 'fs-extra'
 import * as ora from 'ora'
 import { runString, AnyOptions  } from './ast'
+const path = require('path')
 
 export interface Config {
-  controllerPath:string;
+  controllerPath:string;    // controller所在文件夹
+  outputPath:string;        // 文档json文件输出文件夹地址
 }
 
 export default class Doc {
   config:Config = {
-    controllerPath: ''
+    controllerPath: '',
+    outputPath: ''
   }
 
   constructor(config:Config) {
     this.config = config
+    console.log({ config })
   }
 
-   create():void {
+    async create():Promise<AnyOptions> {
     const spinner = ora('start generate document..').start()
     try {
-      this.getControllerPath()
-      .then((filePaths:string[]) => {
-        const runPromises = filePaths.map((controllerFilePath:string) => this.runFile(controllerFilePath))
-        // 将所有的controller数据合并在一起
-        Promise.all([...runPromises])
-        .then((controllerData) => {
-          const dir = process.cwd() + '/src/doc'
-          fs.writeFileSync(`${dir}/doc.js`, 'module.exports = ' + JSON.stringify(controllerData, null, 2), 'utf-8')
-          fs.writeJSONSync(`${dir}/doc.json`, controllerData, {
-            encoding: 'utf-8',
-            spaces: 1
-          })
-          spinner.succeed('document created successfully!')
-        })
+      const filePaths = await this.getControllerPath()
+      const runPromises = filePaths.map((controllerFilePath:string) => this.runFile(controllerFilePath))
+      const allControllerData = await Promise.all([...runPromises])
+      const dir = process.cwd() + '/src/doc'
+      const output = this.config.outputPath || dir
+      fs.writeJSONSync(`${output}/doc.json`, allControllerData, {
+        encoding: 'utf-8',
+        spaces: 1
       })
+      spinner.succeed('document created successfully!')
+      return allControllerData
     } catch (e) {
       console.log(e)
       spinner.fail('document failed to create')
@@ -44,9 +44,15 @@ export default class Doc {
       const { controllerPath = '' } = this.config
       const files = fs.readdirSync(controllerPath)
       const paths = files.map((file:string) => controllerPath + file)
-      const filterPaths = paths.filter((item:string) => item.includes('UserController'))
-      resolve(filterPaths)
+      const filterPaths = paths.filter((item:string) => item.includes('SellerController'))
+      resolve(paths)
     })
+  }
+
+  getTemplate():string {
+    const templateFilePath = path.join(__dirname, './template.html')
+    const fileData = fs.readFileSync(templateFilePath).toString()
+    return fileData
   }
 
   runFile(runFilePath:string):Promise<AnyOptions> {

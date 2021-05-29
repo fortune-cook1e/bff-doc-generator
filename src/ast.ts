@@ -1,7 +1,8 @@
 import * as fs from 'fs-extra'
 import * as path from 'path'
-const { parse } = require('@typescript-eslint/typescript-estree')
+import * as chalk from 'chalk'
 
+import { getSnippets, getSnippetsByFile } from './snippets'
 import { decideTsType } from './util'
 import {
   GetControllerInfoResponse,
@@ -12,6 +13,8 @@ import {
   CommentParamItem,
   MethodParamItem
 } from './types'
+
+const { parse } = require('@typescript-eslint/typescript-estree')
 
 export type AnyOptions = {
   [propname:string]:any;
@@ -24,7 +27,7 @@ export async function runString(code:string, controllerFilePath:string):Promise<
     const filename = path.basename(controllerFilePath, '.ts').toLowerCase()
     const astOptions = {
       comment: true,
-      loc: false,
+      loc: true,
       filePath: controllerFilePath,
       tokens: false,
       range: false,
@@ -37,7 +40,7 @@ export async function runString(code:string, controllerFilePath:string):Promise<
 
     const [controllerInfo, apis, comments] = await Promise.all([
       getControllerInfo(ast, filename),
-      getAstApis(ast),
+      getAstApis(ast, controllerFilePath),
       getAstComments(ast),
     ])
 
@@ -45,21 +48,24 @@ export async function runString(code:string, controllerFilePath:string):Promise<
 
     const combinedApis = combineCommentsAndApis(apis, comments)
 
+    const fileData = fs.readFileSync(controllerFilePath, 'utf-8')
+
     const data = {
       controllerName,
       apiPrefix,
-      apis: combinedApis
+      apis: combinedApis,
+      snippets: fileData
     }
 
-    const dir = process.cwd() + '/src/doc'
-    fs.writeJSONSync(`${dir}/${filename}-.json`, data, {
-      encoding: 'utf-8',
-      spaces: 1
-    })
-    fs.writeJSONSync(`${dir}/${filename}-ast.json`, ast, {
-      encoding: 'utf-8',
-      spaces: 1
-    })
+    // const dir = process.cwd() + '/src/doc'
+    // fs.writeJSONSync(`${dir}/${filename}-.json`, data, {
+    //   encoding: 'utf-8',
+    //   spaces: 1
+    // })
+    // fs.writeJSONSync(`${dir}/${filename}-ast.json`, ast, {
+    //   encoding: 'utf-8',
+    //   spaces: 1
+    // })
     return data
   } catch (e) {
     console.log(e)
@@ -100,7 +106,7 @@ export function getControllerInfo(ast:AnyOptions, filename:string):Promise<GetCo
  * @date 2021-05-15 18:52:14
  * @return {*}
  */
-export function getAstApis(ast:AnyOptions):Promise<TransformAstMethodItemResponse[]> {
+export function getAstApis(ast:AnyOptions, controllerFilePath:string):Promise<TransformAstMethodItemResponse[]> {
   // let methods:AnyOptions[] = []
   return new Promise((resolve, reject) => {
     try {
@@ -108,13 +114,18 @@ export function getAstApis(ast:AnyOptions):Promise<TransformAstMethodItemRespons
         // 只保留 MethodDefinition 类型
       const methodsNodes = classDecAstNode.declaration.body.body.filter((node:AnyOptions) => node.type === 'MethodDefinition')
       const apis = methodsNodes.reduce((apiList, methodItem) => {
-        const item = transformAstMethodItem(methodItem)
-        apiList.push(item)
-        return apiList
+        try {
+          const item = transformAstMethodItem(methodItem, controllerFilePath)
+          apiList.push(item)
+          return apiList
+        } catch (e) {
+          console.error(chalk.red(e.message))
+          console.log(apiList, controllerFilePath)
+        }
       }, [])
       resolve(apis)
     } catch (e) {
-      console.log(e)
+      console.log('getAstApis error', e.message)
       reject([])
     }
   })
@@ -126,15 +137,23 @@ export function getAstApis(ast:AnyOptions):Promise<TransformAstMethodItemRespons
  * @date 2021-05-20 23:32:44
  * @return {*}
  */
-export function transformAstMethodItem(astMethodItem:AnyOptions):TransformAstMethodItemResponse {
+export function transformAstMethodItem(astMethodItem:AnyOptions, controllerFilePath:string):TransformAstMethodItemResponse {
   const { name = '', route = '', description = '', ajaxMethod = '' } = getApiInfo(astMethodItem)
   const params = getAstMethodParams(astMethodItem.value.params)
+  const loc = {
+    start: astMethodItem.loc.start.line,
+    end: astMethodItem.loc.end.line
+  }
+  // TODO: 暂时屏蔽根据readline获取代码片功能 因为会出现没有获取完的情况
+  // const snippetData = await getSnippets(loc.start, loc.end, controllerFilePath)
+  const snippetData = getSnippetsByFile(loc.start, loc.end, controllerFilePath)
   return {
     name,
     route,
     description,
     ajaxMethod,
-    params
+    params,
+    snippets: snippetData
   }
 }
 
@@ -165,21 +184,26 @@ export function getApiInfo(methodAst:AnyOptions):GetApiInfoResponse {
  */
 export function getAstMethodParams(methodParams:any[] = []):GetAstMethodParamsResponse[] {
   return methodParams.reduce((params, paramItem) => {
-    if (paramItem.type === 'Identifier') {
-      const { name = '', typeAnnotation } = paramItem
-      const paramTsType = decideTsType(typeAnnotation)
+    try {
+      if (paramItem.type === 'Identifier') {
+        const { name = '', typeAnnotation = '' } = paramItem
+        const paramTsType = decideTsType(typeAnnotation)
 
-      // optional 为true 那么参数为非必填
-      const isRequired = !paramItem?.optional
+        // optional 为true 那么参数为非必填
+        const isRequired = !paramItem?.optional
 
-      params.push({
-        name,
-        type: paramTsType,
-        description: '',  // 这里的description只能从注释中拿
-        isRequired: isRequired
-      })
+        params.push({
+          name,
+          type: paramTsType,
+          description: '',  // 这里的description只能从注释中拿
+          isRequired: isRequired
+        })
+      }
+      return params
+    } catch (e) {
+      console.error(chalk.red(e.message))
+      console.log(paramItem)
     }
-    return params
   }, [])
 }
 
@@ -276,6 +300,7 @@ function getCommentParams(commentItem):CommentParamItem[] {
   const paramSymbol = '@param'
   const paramList = commentItem.filter((item:AnyOptions) => item.includes(paramSymbol))
   if (!paramList.length) return []
+
   const params = paramList.reduce((list, item) => {
     const paramItem:CommentParamItem = {
       key: '',
