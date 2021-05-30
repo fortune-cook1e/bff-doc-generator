@@ -1,13 +1,16 @@
 {
   "name": "bff-doc-generator",
   "version": "1.0.0",
-  "main": "lib/index",
+  "main": "lib/index.js",
   "repository": "https://github.com/fortune-cook1e/bff-doc-generator.git",
   "author": "fortune cookie <767077147@qq.com>",
   "license": "MIT",
   "scripts": {
     "dev": "tsc -w",
     "compiler": "rimraf dist && tsc"
+  },
+  "publishConfig": {
+  "registry":"https://npm.pkg.github.com"
   },
   "dependencies": {
     "@babel/core": "^7.14.3",
