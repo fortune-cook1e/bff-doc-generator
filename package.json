@@ -13,7 +13,7 @@
     "compiler": "rimraf dist && tsc"
   },
   "publishConfig": {
-    "registry":"https://npm.pkg.github.com/fortune_cookie"
+    "registry":"https://npm.pkg.github.com/fortune-cook1e"
   },
   "dependencies": {
     "@typescript-eslint/typescript-estree": "^4.23.0",
