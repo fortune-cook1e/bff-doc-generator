@@ -10,7 +10,7 @@
     "compiler": "rimraf dist && tsc"
   },
   "publishConfig": {
-  "registry":"https://npm.pkg.github.com"
+    "registry":"https://npm.pkg.github.com/@fortune_cookie"
   },
   "dependencies": {
     "@babel/core": "^7.14.3",
