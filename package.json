@@ -1,8 +1,11 @@
 {
   "name": "bff-doc-generator",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "lib/index.js",
-  "repository": "https://github.com/fortune-cook1e/bff-doc-generator.git",
+  "repository": {
+    "url": "https://github.com/fortune-cook1e/bff-doc-generator.git",
+    "type": "git"
+  },
   "author": "fortune cookie <767077147@qq.com>",
   "license": "MIT",
   "scripts": {
