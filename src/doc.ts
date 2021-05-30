@@ -16,10 +16,10 @@ export default class Doc {
 
   constructor(config:Config) {
     this.config = config
-    console.log({ config })
   }
 
-    async create():Promise<AnyOptions> {
+  // 创建所有controller数据
+  async create():Promise<AnyOptions> {
     const spinner = ora('start generate document..').start()
     try {
       const filePaths = await this.getControllerPath()
@@ -39,6 +39,7 @@ export default class Doc {
     }
   }
 
+  // 获取controller路径
   getControllerPath():Promise<string[]> {
     return new Promise((resolve) => {
       const { controllerPath = '' } = this.config
@@ -49,6 +50,7 @@ export default class Doc {
     })
   }
 
+  // 获取模板文件
   getTemplate():string {
     const templateFilePath = path.join(__dirname, './template.html')
     const fileData = fs.readFileSync(templateFilePath).toString()
