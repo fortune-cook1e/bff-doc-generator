@@ -12,9 +12,6 @@
     "dev": "tsc -w",
     "compiler": "rimraf dist && tsc"
   },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/fortune-cook1e"
-  },
   "dependencies": {
     "@typescript-eslint/typescript-estree": "^4.23.0",
     "chalk": "^4.1.1",
