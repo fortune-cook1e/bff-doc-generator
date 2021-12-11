@@ -1,6 +1,6 @@
 {
   "name": "bff-doc-generator",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "lib/index.js",
   "repository": {
     "url": "https://github.com/fortune-cook1e/bff-doc-generator.git",
@@ -13,7 +13,7 @@
     "compiler": "rimraf dist && tsc"
   },
   "publishConfig": {
-    "registry":"https://npm.pkg.github.com/fortune-cook1e"
+    "registry": "https://npm.pkg.github.com/fortune-cook1e"
   },
   "dependencies": {
     "@typescript-eslint/typescript-estree": "^4.23.0",
