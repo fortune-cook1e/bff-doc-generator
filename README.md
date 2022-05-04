@@ -90,3 +90,7 @@ bff文档生成器
 }
 
 ```
+
+
+### 效果图
+![demo](https://github.com/fortune-cook1e/bff-doc-generator/blob/master/demo.png?raw=true)
